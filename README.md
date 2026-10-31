@@ -8,7 +8,7 @@
 - ✅ **零依赖**：不安装任何第三方包，所有代码自包含
 - ✅ **扫码即用**：微信扫描二维码即可登录，无需公众号或付费 token
 - ✅ **卸载无残留**：所有状态保存在插件 `data/` 目录，删除插件即彻底清除
-- ✅ **插件管理页集成**：在 DSH「插件 → 微信接入」tab 中配置和管理
+- ✅ **插件页集成**：以卡片形式出现在 DSH「插件 → 内置插件配置」中，点开即见二维码
 
 ## 安装
 
@@ -26,13 +26,13 @@ npm install github:djsjis1/dsh
       name: dsh-plugin-wechat
 ```
 
-重启 DSH 后，打开 Web UI → 插件页面 → 微信接入 tab。
+重启 DSH 后，打开 Web UI → 插件页面 →「内置插件配置」中的「微信接入」卡片。
 
 ## 使用流程
 
-1. **打开插件页面**：DSH Web UI → 插件 → 微信接入
-2. **扫描二维码**：用微信扫描页面显示的二维码
-3. **确认登录**：在手机上确认登录
+1. **打开插件页面**：DSH Web UI → 插件 → 内置插件配置 → 微信接入
+2. **扫描二维码**：用微信扫描卡片页面里的二维码
+3. **自动绑定**：手机确认后插件自动切到已连接，无需手动刷新
 4. **开始使用**：在微信里给机器人发消息即可调用 DSH
 
 ## 技术架构
@@ -57,10 +57,12 @@ npm install github:djsjis1/dsh
 dsh-plugin-wechat/
 ├── lib/
 │   ├── index.js          # 插件主入口，Bridge 类
-│   ├── client.js         # 浏览器端 UI（注册到 plugins.tab）
+│   ├── client.js         # 浏览器端 UI（注册到 plugins.item 卡片槽位）
 │   ├── server.js         # HTTP API 路由（无需独立回调端口）
 │   ├── config.js         # 配置持久化（data/config.json）
 │   ├── runner.js         # dsh headless 调用
+│   ├── qr.js             # 二维码矩阵 → SVG
+│   ├── qr/               # 内联的 MIT 二维码编码器（Kazuhiko Arase）
 │   └── adapters/
 │       └── ilink.js      # iLink Bot API 适配器
 ├── data/                 # 运行时状态（bot_token、配置）
@@ -73,9 +75,11 @@ dsh-plugin-wechat/
 - **无 npm 依赖**：不安装 wechaty、padlocal 等第三方包
 - **内置实现**：
   - HTTP 请求：Node.js 原生 `fetch`
-  - 签名校验：`node:crypto`
-  - 二维码渲染：腾讯官方返回图片 URL
+  - 二维码编码：内联在 `lib/qr/`（MIT，源同 qrcode-generator）
+  - 二维码输出：`/wechat-bridge/qr.svg` 同源返回 SVG，不依赖任何外链
   - 配置持久化：JSON 文件
+
+> 为什么自己画二维码：iLink 返回的 `qrcode_img_content` 是一个由 JS 渲染的页面，不能直接当图片用；官方页面里二维码编码的是该页面 URL（`location.href`），因此插件把这条链接编码成 SVG 由自己输出。
 
 ## 配置说明
 
