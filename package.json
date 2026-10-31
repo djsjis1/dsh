@@ -1,7 +1,7 @@
 {
   "name": "dsh-plugin-wechat",
-  "version": "0.1.0",
-  "description": "Scan-to-bind WeChat bridge for DeepSeek Harness: bind an Official Account (free) or a personal WeChat account (padlocal) from the DSH settings page and drive dsh headless from chat. Fully self-contained; removing the plugin removes every trace.",
+  "version": "0.2.0",
+  "description": "Scan-to-bind WeChat bridge for DeepSeek Harness using official iLink Bot API. Zero external dependencies, fully self-contained.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -18,7 +18,7 @@
     "dsh",
     "deepseek-harness",
     "wechat",
-    "wechaty",
+    "ilink",
     "cordis-plugin"
   ],
   "license": "MIT",
@@ -35,9 +35,5 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.0.5"
-  },
-  "optionalDependencies": {
-    "wechaty": "^1.20.2",
-    "wechaty-puppet-padlocal": "^1.0.5"
   }
 }
