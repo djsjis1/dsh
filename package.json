@@ -4,6 +4,9 @@
   "description": "Scan-to-bind WeChat bridge for DeepSeek Harness using official iLink Bot API. Zero external dependencies, fully self-contained.",
   "type": "module",
   "main": "lib/index.js",
+  "scripts": {
+    "test": "node test/client-smoke.mjs"
+  },
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
